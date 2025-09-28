@@ -46,7 +46,8 @@ const feeRecipient = new PublicKey('62qc2CNXwrYqQScmEdiZFFAnJR262PxWEuNQtxfafNgV
 const feeRecipientAta = new PublicKey('94qWNrtmfn42h3ZjUZwWvK1MEo9uVmmrBPd2hpNjYDjb');
 const BUY_DISCRIMINATOR: Uint8Array = new Uint8Array([102,6,61,18,1,218,235,234]);
 const SELL_DISCRIMINATOR: Uint8Array = new Uint8Array([51,230,133,164,1,127,131,173]);
-
+const Fee_config = new PublicKey('5PHirr8joyTMp9JMm6nW7hNDVyEYdkzDqazxPD7RaTjx');
+const fee_program = new PublicKey('pfeeUxB6jkeY1Hxd7CsFCAjcbHA9rWtchMGdZ6VojVZ');
   
 export const DEFAULT_DECIMALS = 6;
 
@@ -242,6 +243,8 @@ export class PumpSwapSDK {
       { pubkey: coin_creator_vault_authority, isSigner: false, isWritable: false }, // coin_creator_vault_authority (readonly)
       { pubkey: global_volume_accumulator, isSigner: false, isWritable: true }, // global_volume_accumulator (writable)
       { pubkey: user_volume_accumulator, isSigner: false, isWritable: true }, // user_volume_accumulator (writable)
+      { pubkey: Fee_config, isSigner: false, isWritable: false }, 
+      { pubkey: fee_program, isSigner: false, isWritable: false }
     ];
   
     // Pack the instruction data: discriminator (8 bytes) + base_amount_in (8 bytes) + min_quote_amount_out (8 bytes)
@@ -278,10 +281,6 @@ async createSellInstruction(
   const coin_creator_vault_ata_data = getCoinCreatorVaultAtaPda(coin_creator_vault_authority, TOKEN_PROGRAM_ID, NATIVE_MINT);
   console.log("coin_creator_vault_ata: ", coin_creator_vault_ata_data[0].toBase58());
   const coin_creator_vault_ata = coin_creator_vault_ata_data[0];
-  const global_volume_accumulator = globalVolumeAccumulatorPda(PUMP_AMM_PROGRAM_ID);
-  const user_volume_accumulator = userVolumeAccumulatorPda(user, PUMP_AMM_PROGRAM_ID);
-  console.log("global_volume_accumulator: ", global_volume_accumulator[0].toBase58());
-  console.log("user_volume_accumulator: ", user_volume_accumulator[0].toBase58());
   // Define the accounts for the instruction
   const accounts = [
     { pubkey: poolId, isSigner: false, isWritable: false }, // pool_id (readonly)
@@ -303,8 +302,8 @@ async createSellInstruction(
     { pubkey: PUMP_AMM_PROGRAM_ID, isSigner: false, isWritable: false }, // PUMP_AMM_PROGRAM_ID (readonly)
     { pubkey: coin_creator_vault_ata, isSigner: false, isWritable: true }, // coin_creator_vault_ata (writable)
     { pubkey: coin_creator_vault_authority, isSigner: false, isWritable: false }, // coin_creator_vault_authority (readonly)
-    { pubkey: global_volume_accumulator, isSigner: false, isWritable: true }, // global_volume_accumulator (writable)
-    { pubkey: user_volume_accumulator, isSigner: false, isWritable: true }, // user_volume_accumulator (writable)
+    { pubkey: Fee_config, isSigner: false, isWritable: false }, 
+    { pubkey: fee_program, isSigner: false, isWritable: false }
   ];
 
   // Pack the instruction data: discriminator (8 bytes) + base_amount_in (8 bytes) + min_quote_amount_out (8 bytes)
