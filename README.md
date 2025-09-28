@@ -41,7 +41,6 @@ async function main() {
 }
 ```
 
-## Discord channel: https://discord.gg/hFhQeBCqWX
+## Discord channel: https://discord.gg/dc3Kh3Y3yJ
 
 ## Credit: https://github.com/ElmTheDev/pumpswap (the pool.ts is copied from this repo)
-
